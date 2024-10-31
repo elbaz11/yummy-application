@@ -3,6 +3,8 @@ console.log(sideBarWidth);
 
 $('.side-bar').animate({left:`-${sideBarWidth}`},10)
 $('.beside').animate({left:0},10)
+$('.Links li').animate({top:300},500)
+
 
 $('.closeIcon, .openIcon').click(function() {
     let sideBarWidth = $('.side-bar').outerWidth();
@@ -13,12 +15,19 @@ $('.closeIcon, .openIcon').click(function() {
         $('.beside').animate({ left: '0' }, 500);
         $('.closeIcon').addClass('d-none');
         $('.openIcon').removeClass('d-none');
+
+        $('.Links li').animate({top:300},500)
     } else {
         
         $('.side-bar').animate({ left: '0px' }, 500);
         $('.beside').animate({ left: `${sideBarWidth}px` }, 500);
         $('.openIcon').addClass('d-none');
         $('.closeIcon').removeClass('d-none');
+
+        for(let i=0 ; i<5 ; i++){
+            $('.Links li').eq(i).animate({top:0},(i+5)*100)
+
+        }
     }
 });
 
@@ -61,19 +70,16 @@ function displayMeals(arr) {
 }
 
 async function displayDetails(idMeal) {
-    showSpinner()
+    showSpinner();
     let response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`);
     let data = await response.json();
-    // console.log(data);
     
     let meal = data.meals[0];
-
-    
     let cartona = `
     <div class="HiddenDiv">
-        <div class="container ">
+        <div class="container">
             <div class="recipe-image">
-                <img class=" w-100 " src="${meal.strMealThumb}" alt="">
+                <img class="w-100" src="${meal.strMealThumb}" alt="">
                 <h2>${meal.strMeal}</h2>
             </div>
             <div class="recipe-details">
@@ -82,32 +88,45 @@ async function displayDetails(idMeal) {
                 <h3>Area: <span>${meal.strArea}</span></h3>
                 <h3>Category: <span>${meal.strCategory}</span></h3>
                 <h3>Recipes:</h3>
-            <div class="recipe-tags">`;
+                <div class="recipe-tags">`;
 
     
     for (let i = 1; i <= 20; i++) {
         let ingredient = meal[`strIngredient${i}`];
         let measure = meal[`strMeasure${i}`];
         if (ingredient && ingredient.trim() !== "") {
-            cartona += `<span>${measure} ${ingredient}</span>`;
+            cartona += `<span>${measure} ${ingredient}</span> `;
         }
     }
 
     cartona += `
                 </div>
                 <h3>Tags:</h3>
-                <div class="tags">
+                <div class="tags">`;
+
+    
+    if (meal.strTags) {
+        let tags = meal.strTags.split(",");
+        tags.forEach(tag => {
+            cartona += `<span class="tag">${tag.trim()}</span> `;
+        });
+    } else {
+        cartona += `<span>No Tags Available</span>`;
+    }
+
+    cartona += `
+                </div>
+                <div class="buttons mt-2">
                     <a href="${meal.strYoutube}" target="_blank" class="btn btn-danger">Youtube</a>
-                     <a href="${meal.strSource}" target="_blank" class="btn btn-success">Source</a>
+                    <a href="${meal.strSource}" target="_blank" class="btn btn-success">Source</a>
                 </div>
             </div>
         </div>
     </div>
     `;
 
-   
     document.querySelector('.row').innerHTML = cartona;
-    hideSpinner()
+    hideSpinner();
 }
 
 
@@ -324,7 +343,7 @@ function displaySearchMeals(arr) {
 }
 
 async function displayMyDetails(idMeal) {
-    showSpinner()
+    showSpinner();
     let response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`);
     let data = await response.json();
     let meal = data.meals[0];
@@ -342,20 +361,35 @@ async function displayMyDetails(idMeal) {
                 <h3>Area: <span>${meal.strArea}</span></h3>
                 <h3>Category: <span>${meal.strCategory}</span></h3>
                 <h3>Recipes:</h3>
-            <div class="recipe-tags">`;
+                <div class="recipe-tags">`;
 
+    
     for (let i = 1; i <= 20; i++) {
         let ingredient = meal[`strIngredient${i}`];
         let measure = meal[`strMeasure${i}`];
         if (ingredient && ingredient.trim() !== "") {
-            cartona += `<span>${measure} ${ingredient}</span>`;
+            cartona += `<span>${measure} ${ingredient}</span> `;
         }
     }
 
     cartona += `
                 </div>
                 <h3>Tags:</h3>
-                <div class="tags">
+                <div class="tags">`;
+
+    
+    if (meal.strTags) {
+        let tags = meal.strTags.split(",");
+        tags.forEach(tag => {
+            cartona += `<span class="tag">${tag.trim()}</span> `;
+        });
+    } else {
+        cartona += `<span>No Tags Available</span>`;
+    }
+
+    cartona += `
+                </div>
+                <div class="buttons mt-2">
                     <a href="${meal.strYoutube}" target="_blank" class="btn btn-danger">Youtube</a>
                     <a href="${meal.strSource}" target="_blank" class="btn btn-success">Source</a>
                 </div>
@@ -365,7 +399,7 @@ async function displayMyDetails(idMeal) {
     `;
 
     document.querySelector('.myRow').innerHTML = cartona;
-    hideSpinner()
+    hideSpinner();
 }
 
 function forinp(){
@@ -416,27 +450,25 @@ ageInput.addEventListener('input', () => validateAllInputs(ageInput, 'age'));
 passwordInput.addEventListener('input', () => validateAllInputs(passwordInput, 'pass'));
 repasswordInput.addEventListener('input', () => validateAllInputs(repasswordInput, 'repass'));
 
-
 function validateAllInputs(elem, type) {
+    let alertElem = document.getElementById(type + "Alert");
     if (regex[type] && regex[type].test(elem.value)) {
-        document.getElementById(type + "Alert").classList.add('d-none');
+        if (alertElem) alertElem.classList.add('d-none');
     } else {
-        document.getElementById(type + "Alert").classList.remove('d-none');
+        if (alertElem) alertElem.classList.remove('d-none');
     }
     
-    
     if (type === 'repass') {
+        let repassAlert = document.getElementById('repassAlert');
         if (elem.value === passwordInput.value) {
-            document.getElementById('repassAlert').classList.add('d-none');
+            if (repassAlert) repassAlert.classList.add('d-none');
         } else {
-            document.getElementById('repassAlert').classList.remove('d-none');
+            if (repassAlert) repassAlert.classList.remove('d-none');
         }
     }
 
-   
     checkAllValidations();
 }
-
 
 function checkAllValidations() {
     let allValid = regex.name.test(nameeInput.value) &&
@@ -445,6 +477,8 @@ function checkAllValidations() {
                    regex.age.test(ageInput.value) &&
                    regex.pass.test(passwordInput.value) &&
                    repasswordInput.value === passwordInput.value;
+
+   
 
     submitButton.disabled = !allValid; 
 }

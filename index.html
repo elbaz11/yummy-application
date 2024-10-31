@@ -52,12 +52,12 @@
   
   <div class="d-flex ">
     <div class="side-bar  ">
-      <ul class="">
-        <li class=" searchLink mt-4">Search</li>
-        <li class=" category">Categories</li>
-        <li class=" area">Area</li>
-        <li class=" ingredient">Ingredients</li>
-        <li class=" contact">Contact Us</li>
+      <ul class="Links">
+        <li class=" position-relative searchLink mt-4">Search</li>
+        <li class=" position-relative category">Categories</li>
+        <li class=" position-relative area">Area</li>
+        <li class=" position-relative ingredient">Ingredients</li>
+        <li class=" position-relative contact">Contact Us</li>
       </ul>
       <div >
         <div class="icons ms-4">
@@ -113,12 +113,10 @@
 
 <div class="container-fluid input-cont d-none ">
   <div class="m-auto text-center mt-5">
-    <!-- الحقل الأول -->
     <div class="d-flex col-md-8 m-auto align-items-center mb-3">
       <input oninput="validateAllInputs(this)" id="name" class=" form-control mx-2" placeholder="Enter Your Name" type="name">
       <input oninput="validateAllInputs(this)" id="email" class=" form-control mx-2" placeholder="Enter Your Email" type="email">
     </div>
-    <!-- التنبيه -->
     <div class="d-flex  col-md-8 m-auto align-items-center mb-3">
       <div id="nameAlert" class="alert d-none alert-danger mx-2 w-50">
         Special characters and numbers not allowed
@@ -127,7 +125,6 @@
         Email not valid *example@yyy.zzz
       </div>
     </div>
-    <!-- الحقل الثاني -->
     <div class="d-flex col-md-8 m-auto align-items-center mb-3">
       <input oninput="validateAllInputs(this)" id="phone" class=" form-control mx-2" placeholder="Enter Your Phone" type="tel">
       <input oninput="validateAllInputs(this)" id="age" class=" form-control mx-2" placeholder="Enter Your Age" type="number">
@@ -141,7 +138,6 @@
       </div>
     </div>
 
-    <!-- الحقل الثالث -->
     <div class="d-flex col-md-8  m-auto align-items-center">
       <input oninput="validateAllInputs(this)" id="pass" class=" form-control mx-2" placeholder="Enter Your Password" type="password">
       <input oninput="validateAllInputs(this)" id="repass" class=" form-control mx-2" placeholder="Repassword" type="password">
@@ -155,7 +151,6 @@
       </div>
     </div>
 
-    <!-- زر الإرسال -->
     <button class="mt-4 btn btn-danger" disabled>Submit</button>
   </div>
 </div>
